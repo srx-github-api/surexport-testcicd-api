@@ -1,4 +1,13 @@
-build:
+name: Build and Deploy to Sandbox
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    
+jobs:
+  build:
     needs: test
     runs-on: ubuntu-latest
     steps:
