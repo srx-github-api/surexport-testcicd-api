@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<error-handler name="APIKIT_ERROR_HANDLER" doc:id="6b705b97-16e8-4545-87c4-f3309692f0f3">
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="8a2d262a-1a61-4c0f-b2dc-6a201c411bd3" type="APIKIT:NOT_FOUND">
+			<ee:transform doc:name="Transform Message" doc:id="5fa85fa3-b55d-48b1-afce-b3d2ecb7f688">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	success: false,
+	description: "Resource not found",
+	errorCode: 0,
+	exceptionType: "APIKIT_EXCEPTION",
+	body: error.description as String default ""
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA[404]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<logger level="INFO" doc:name="error" doc:id="68ae1c50-75a9-4e3f-b99b-6226c010a7e6" message='#["# APIKIT_HANDLER_GLOBAL - error: " ++ write(payload)]' />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="658051fb-bc8e-4602-b649-d735f3ecb320" type="APIKIT:METHOD_NOT_ALLOWED">
+			<ee:transform doc:name="Transform Message" doc:id="65b83dee-1a8b-4047-94e8-5bd72425251d">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	success: false,
+	description: "Method not allowed",
+	errorCode: 0,
+	exceptionType: "APIKIT_EXCEPTION",
+	body: error.description as String default ""
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA[405]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<logger level="INFO" doc:name="error" doc:id="f7afe4ee-919e-4a89-a62c-78f7cd64da22" message='#["# APIKIT_HANDLER_GLOBAL - error: " ++ write(payload)]' />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="10d4be8c-b921-4a4b-9d95-2fab46c6b1d6" type="APIKIT:NOT_ACCEPTABLE">
+			<ee:transform doc:name="Transform Message" doc:id="b1d3f0c2-0c5b-46fd-b062-99668bb2b599">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	success: false,
+	description: "Not acceptable",
+	errorCode: 0,
+	exceptionType: "APIKIT_EXCEPTION",
+	body: error.description as String default ""
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA[406]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<logger level="INFO" doc:name="error" doc:id="39d0d793-be9d-4c3d-a486-5be4c6cc0f28" message='#["# APIKIT_HANDLER_GLOBAL - error: " ++ write(payload)]' />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="81841758-0cd6-4564-805b-ce62fe2e2a4e" type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+			<ee:transform doc:name="Transform Message" doc:id="aa563ded-342d-41d6-b864-4a0b09b32984">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	success: false,
+	description: "Unsupported media type",
+	errorCode: 0,
+	exceptionType: "APIKIT_EXCEPTION",
+	body: error.description as String default ""
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA[415]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<logger level="INFO" doc:name="error" doc:id="a2dffb78-aeaf-4088-acb3-bef76bf7db5a" message='#["# APIKIT_HANDLER_GLOBAL - error: " ++ write(payload)]' />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="22eb6b61-21b3-468b-8509-eddaef13b417" type="APIKIT:NOT_IMPLEMENTED">
+			<ee:transform doc:name="Transform Message" doc:id="fc4da4d6-707d-4602-b1c0-ae3a6554f7f6">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	success: false,
+	description: "Not implemented",
+	errorCode: 0,
+	exceptionType: "APIKIT_EXCEPTION",
+	body: error.description as String default ""
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA[501]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<logger level="INFO" doc:name="error" doc:id="13311446-51de-4cd7-ae2f-d011fd43db45" message='#["# APIKIT_HANDLER_GLOBAL - error: " ++ write(payload)]' />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="8da54c7b-dc05-4d8f-b538-90e378dde35c" type="APIKIT:BAD_REQUEST">
+			<ee:transform doc:name="Transform Message" doc:id="ea116518-a21e-4f80-b862-f2ffd5f008fe">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	success: false,
+	description: "Bad Request",
+	errorCode: 0,
+	exceptionType: "APIKIT_EXCEPTION",
+	body: error.description as String default ""
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA[400]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<logger level="INFO" doc:name="error" doc:id="af20cdf4-c803-4f9d-bf9b-28c823dc6fb8" message='#["# APIKIT_HANDLER_GLOBAL - error: " ++ write(payload)]' />
+		</on-error-propagate>
+	</error-handler>
+	<error-handler name="GLOBAL_ERROR_HANDLER" doc:id="dc9bd0ed-d79e-474a-a21d-78be3752c546">
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="22b0f159-3f07-4bb8-8c44-ebc7feba5eaf" type="ANY">
+			<flow-ref doc:name="ERROR_HANDLER_CRITICAL" doc:id="7831d23a-7f03-452d-a1e6-20b87f44fe74" name="ERROR_HANDLER_CRITICAL" />
+		</on-error-propagate>
+	</error-handler>
+	<flow name="ERROR_HANDLER_CRITICAL" doc:id="dbce7106-0221-443c-a8d7-e7cf450ddce0">
+		<ee:transform doc:name="payload &amp; httpStatus" doc:id="0ed39910-e504-45cb-8420-a5f3fa5d06fb">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	success: false,
+	description: "Unexpected exception thrown",
+	errorCode: 0,
+	exceptionType: "CRITICAL_EXCEPTION",
+	body: error.description as String default ""
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
+output application/json
+---
+200]]></ee:set-variable>
+
+			
+</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="error" doc:id="b7b79893-c093-4642-aa77-866af97cf5ed" message='#["# ERROR_HANDLER_GLOBAL - error: " ++ write(payload)]' />
+	</flow>
+
+</mule>

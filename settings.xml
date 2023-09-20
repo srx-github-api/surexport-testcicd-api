@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <servers>
+    <server>
+      <!-- MuleSoft repository for artifacts related to Mule runtime EE -->
+      <id>mulesoft-releases</id>
+      <!-- students: replace with credentials provided in class -->
+      <username>~~~Token~~~</username>
+      <password>${authToken}</password>
+    </server>
+    <server>
+      <!-- Anypoint Exchange repository for deployments via the v3 EMMP -->
+      <id>anypoint-exchange-v3</id>
+      <!-- students: to read from or deploy to the Exchange Maven repo of your Anypoint Platform organization, replace with credentials for a suitable account of your org -->
+      <username>~~~Token~~~</username>
+      <password>${authToken}</password>
+    </server>
+    <server>
+      <!-- default Anypoint Exchange repository: the username determines which Anypoint Platform organization this belongs to -->
+      <!-- this is dangerous because it uses a generic repo ID! -->
+      <!-- this entry is therefore not required for the final solution, just for walkthroughs -->
+      <id>anypoint-exchange-v2</id>
+      <!-- students: to read from or deploy to the Exchange Maven repo of your Anypoint Platform organization, replace with credentials for a suitable account of your org -->
+      <username>~~~Token~~~</username>
+      <password>${authToken}</password>
+    </server>
+    <server>
+      <!-- default Anypoint Exchange repository: the username determines which Anypoint Platform organization this belongs to -->
+      <!-- this is dangerous because it uses a generic repo ID! -->
+      <!-- this entry is therefore not required for the final solution, just for walkthroughs -->
+      <id>mulesoft-surexport-repository</id>
+      <!-- students: to read from or deploy to the Exchange Maven repo of your Anypoint Platform organization, replace with credentials for a suitable account of your org -->
+      <username>~~~Token~~~</username>
+      <password>${authToken}</password>
+    </server>
+  </servers>
+</settings>
