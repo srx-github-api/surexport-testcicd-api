@@ -56,13 +56,21 @@ jobs:
         name: artifacts
     - name: Deploy to Sandbox
       env:
-        USERNAME: ${{ secrets.anypoint_platform_username }}
-        PASSWORD: ${{ secrets.anypoint_platform_password }}
-        KEY: ${{ secrets.decryption_key }}
+        MULE_CLIENT_ID: ${{ vars.mule_client_id }}
+        MULE_CLIENT_SECRET: ${{ vars.mule_client_secret }}
+        MULE_APP_NAME: ${{ vars.application_name }}
+        MULE_ENVIRONMENT: ${{ vars.environment }}
+        MULE_WORKERS: ${{ vars.mule_workers }}
+        MULE_WORKER_TYPE: ${{ vars.mule_worker_type }}
+        ENCRYPT_KEY: ${{ vars.encrypt_key }}
       run: |
-        artifactName=$(ls *.jar | head -1)
-        mvn deploy -DskipMunitTests -DmuleDeploy \
-         -Dmule.artifact=$artifactName \
-         -Danypoint.username="$USERNAME" \
-         -Danypoint.password="$PASSWORD" \
-         -Ddecryption.key="$KEY"
+        chmod +x src/main/resources/scripts/maven-application-deploy.sh 
+        ./src/main/resources/scripts/maven-application-deploy.sh \
+         --client-id=$MULE_CLIENT_ID \
+         --client-secret=$MULE_CLIENT_SECRET \
+         --application-name=$MULE_APP_NAME \
+         --environment=$MULE_ENVIRONMENT \
+         --workers=$MULE_WORKERS \
+         --worker-type=$MULE_WORKER_TYPE \
+         --env=dev \
+         --encrypt-key=$ENCRYPT_KEY
