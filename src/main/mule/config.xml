@@ -9,6 +9,6 @@
         <tls:key-store type="pkcs12" path="keystore/keystore-surexport.pkcs12" alias="mule-surexport" keyPassword="Surexport2023*" password="Surexport2023*" />
     </tls:context>
 	<http:listener-config name="HTTP_LISTENER_CONFIG" doc:name="HTTP Listener config" doc:id="8a4a6767-2389-4b41-9f97-99893f173cf9" >
-		<http:listener-connection host="0.0.0.0" port="8081" />
+		<http:listener-connection host="0.0.0.0" port="8082" protocol="HTTPS" tlsContext="TLS_Context"/>
 	</http:listener-config>
 </mule>
