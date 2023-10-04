@@ -35,7 +35,7 @@ jobs:
          --repository-name=$REPOSITORY_NAME \
          --client-id=$MULE_CLIENT_ID \
          --client-secret=$MULE_CLIENT_SECRET
-        mvn -B package --file pom.xml -DskipMunitTests
+        mvn -B package --file pom.xml -DskipMunitTests -DattachMuleSources
     - name: Stamp artifact file name with commit hash
       run: |
         artifactName1=$(ls target/*.jar | head -1)
