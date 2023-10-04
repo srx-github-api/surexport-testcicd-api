@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
   <servers>
-    <server>
-      <id>mulesoft-surexport-repository</id>
-      <username>~~~Client~~~</username>
-      <password>9237ebeeb9674c56ba630037fd0654dd~?~e0431D9CDB674900a17654F3146955B9</password>
-    </server>
   </servers>
 </settings>

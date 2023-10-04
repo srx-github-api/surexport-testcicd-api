@@ -25,9 +25,16 @@ jobs:
         distribution: 'zulu'
         java-version: 8
     - name: Build with Maven
+      env:
+        MULE_CLIENT_ID: ${{ vars.mule_client_id }}
+        MULE_CLIENT_SECRET: ${{ vars.mule_client_secret }}
+        REPOSITORY_NAME: ${{ vars.repository_name }}
       run: |
-        chmod +x src/main/resources/scripts/maven-configure.sh
-        ./src/main/resources/scripts/maven-configure.sh
+        chmod +x src/main/resources/scripts/maven-configure.sh 
+        ./src/main/resources/scripts/maven-configure.sh \
+         --repository-name=$REPOSITORY_NAME \
+         --client-id=$MULE_CLIENT_ID \
+         --client-secret=$MULE_CLIENT_SECRET
         mvn -B package --file pom.xml -DskipMunitTests
     - name: Stamp artifact file name with commit hash
       run: |
