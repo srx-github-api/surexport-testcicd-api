@@ -17,6 +17,14 @@ for i in "$@"; do
       ENVIRONMENT="${i#*=}"
       shift
       ;;
+    --anypoint-platform-client-id=*)
+      ANYPOINT_PLATFORM_CLIENT_ID="${i#*=}"
+      shift
+      ;;
+    --anypoint-platform-client-secret=*)
+      ANYPOINT_PLATFORM_CLIENT_SECRET="${i#*=}"
+      shift
+      ;;
     --workers=*)
       WORKERS="${i#*=}"
       shift
@@ -90,4 +98,4 @@ fi
 
 OAUTH_TOKEN="$(curl -s --location --request POST https://anypoint.mulesoft.com/accounts/api/v2/oauth2/token --header "Content-Type: application/x-www-form-urlencoded" --data-urlencode "client_id=$CLIENT_ID" --data-urlencode "client_secret=$CLIENT_SECRET" --data-urlencode "grant_type=client_credentials" | grep -oP '(?<="access_token":")[^"]*')"
 APPLICATION_NAME="$APPLICATION_NAME"-"$ENV"
-mvn deploy -DmuleDeploy -DattachMuleSources -DauthToken=${OAUTH_TOKEN} -Dcloudhub.environment=${ENVIRONMENT} -Dcloudhub.application.name=${APPLICATION_NAME} -Ddeployment.workers=${WORKERS} -Ddeployment.worker.type=${WORKER_TYPE} -Denv=${ENV} -DencryptKey=${ENCRYPT_KEY}
+mvn deploy -DmuleDeploy -DattachMuleSources -DauthToken=${OAUTH_TOKEN} -Dcloudhub.environment=${ENVIRONMENT} -Danypoint.platform.client_id=${ANYPOINT_PLATFORM_CLIENT_ID} -Danypoint.platform.client_secret=${ANYPOINT_PLATFORM_CLIENT_SECRET} -Dcloudhub.application.name=${APPLICATION_NAME} -Ddeployment.workers=${WORKERS} -Ddeployment.worker.type=${WORKER_TYPE} -Denv=${ENV} -DencryptKey=${ENCRYPT_KEY}

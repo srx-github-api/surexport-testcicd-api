@@ -45,6 +45,8 @@
 						<deploymentTimeout>600000</deploymentTimeout>
 						<applyLatestRuntimePatch>true</applyLatestRuntimePatch>
 						<properties>
+							<anypoint.platform.client_id>${anypoint.platform.client_id}</anypoint.platform.client_id>
+							<anypoint.platform.client_secret>${anypoint.platform.client_secret}</anypoint.platform.client_secret>
 							<env>${env}</env>
 							<encryptKey>${encryptKey}</encryptKey>
 						</properties>
