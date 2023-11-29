@@ -1,14 +1,14 @@
-name: Build and Deploy to Sandbox
+name: Build and deploy to DEV
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:  
+     - dev
     
 jobs:
-  build:
+  build-dev:
     runs-on: ubuntu-latest
+    environment: DEV
     steps:
     - name: Checkout this repo
       uses: actions/checkout@v3
@@ -26,8 +26,8 @@ jobs:
         java-version: 8
     - name: Build with Maven
       env:
-        MULE_CLIENT_ID: ${{ vars.mule_client_id }}
-        MULE_CLIENT_SECRET: ${{ vars.mule_client_secret }}
+        MULE_CLIENT_ID: ${{ secrets.mule_client_id }}
+        MULE_CLIENT_SECRET: ${{ secrets.mule_client_secret }}
         REPOSITORY_NAME: ${{ vars.repository_name }}
       run: |
         chmod +x src/main/resources/scripts/maven-configure.sh 
@@ -47,40 +47,4 @@ jobs:
       with:
           name: artifacts
           path: target/*.jar
-        
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:    
-    - name: Checkout this repo
-      uses: actions/checkout@v3
-    - name: Cache dependencies
-      uses: actions/cache@v3
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
-    - uses: actions/download-artifact@v3
-      with:
-        name: artifacts
-    - name: Deploy to Sandbox
-      env:
-        MULE_CLIENT_ID: ${{ vars.mule_client_id }}
-        MULE_CLIENT_SECRET: ${{ vars.mule_client_secret }}
-        MULE_APP_NAME: ${{ vars.application_name }}
-        MULE_ENVIRONMENT: ${{ vars.environment }}
-        MULE_WORKERS: ${{ vars.mule_workers }}
-        MULE_WORKER_TYPE: ${{ vars.mule_worker_type }}
-        ENCRYPT_KEY: ${{ vars.encrypt_key }}
-      run: |
-        chmod +x src/main/resources/scripts/maven-application-deploy.sh 
-        ./src/main/resources/scripts/maven-application-deploy.sh \
-         --client-id=$MULE_CLIENT_ID \
-         --client-secret=$MULE_CLIENT_SECRET \
-         --application-name=$MULE_APP_NAME \
-         --environment=$MULE_ENVIRONMENT \
-         --workers=$MULE_WORKERS \
-         --worker-type=$MULE_WORKER_TYPE \
-         --env=dev \
-         --encrypt-key=$ENCRYPT_KEY
+
