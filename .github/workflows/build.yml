@@ -48,3 +48,53 @@ jobs:
           name: artifacts
           path: target/*.jar
 
+  deploy-dev:
+    needs: build-dev
+    runs-on: ubuntu-latest
+   
+    environment: DEV
+    steps:    
+    - name: Checkout this repo
+      uses: actions/checkout@v3
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+    - uses: actions/download-artifact@v3
+      with:
+        name: artifacts
+    - name: Deploy app asset to Exchange
+      run: |
+        mvn clean deploy || true
+    - name: Deploy to Sandbox
+      env:
+        MULE_CLIENT_ID: ${{ secrets.mule_client_id }}
+        MULE_CLIENT_SECRET: ${{ secrets.mule_client_secret }}
+        ANYPOINT_CLIENT_ID: ${{ secrets.mule_client_id }}
+        ANYPOINT_CLIENT_SECRET: ${{ secrets.mule_client_secret }}
+        MULE_APP_NAME: ${{ vars.application_name }}
+        MULE_TARGET_NAME: ${{ vars.target_name }}
+        MULE_SERVER_ID: ${{ vars.repository_name }}
+        REPOSITORY_NAME: ${{ vars.repository_name }}
+        MULE_ENVIRONMENT: ${{ vars.environment }}
+        MULE_REPLICAS: ${{ vars.replicas }}
+        MULE_VCORES: ${{ vars.vcores }}
+        ENCRYPT_KEY: ${{ secrets.encrypt_key }}
+      run: |
+        chmod +x src/main/resources/scripts/maven-application-deploy.sh 
+        ./src/main/resources/scripts/maven-application-deploy.sh \
+         --client-id=$MULE_CLIENT_ID \
+         --client-secret=$MULE_CLIENT_SECRET \
+         --anypoint-platform-client-id=$ANYPOINT_CLIENT_ID \
+         --anypoint-platform-client-secret=$ANYPOINT_CLIENT_SECRET \
+         --application-name=$MULE_APP_NAME \
+         --target-name=$MULE_TARGET_NAME \
+         --server-id=$REPOSITORY_NAME \
+         --environment=$MULE_ENVIRONMENT \
+         --replicas=$MULE_REPLICAS \
+         --vcores=$MULE_VCORES \
+         --env=dev \
+         --encrypt-key=$ENCRYPT_KEY
