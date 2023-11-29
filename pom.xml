@@ -30,27 +30,24 @@
 				<extensions>true</extensions>
 				<configuration>
 					<classifier>mule-application</classifier>
-					<cloudHubDeployment>
-						<uri>https://anypoint.mulesoft.com</uri>
-						<muleVersion>${deployment.mule.runtime}</muleVersion>
-						<businessGroupId>${project.groupId}</businessGroupId>
-						<authToken>${authToken}</authToken>
-						<environment>${cloudhub.environment}</environment>
-						<applicationName>${cloudhub.application.name}</applicationName>
-						<region>eu-central-1</region>
-						<workers>${deployment.workers}</workers>
-						<workerType>${deployment.worker.type}</workerType>
-						<objectStoreV2>true</objectStoreV2>
-						<persistentQueues>false</persistentQueues>
-						<deploymentTimeout>600000</deploymentTimeout>
-						<applyLatestRuntimePatch>true</applyLatestRuntimePatch>
-						<properties>
+					<cloudhub2Deployment>
+				  		<uri>https://anypoint.mulesoft.com</uri>
+				      	<muleVersion>${deployment.mule.runtime}</muleVersion>
+				      	<businessGroupId>${project.groupId}</businessGroupId>
+				      	<provider>MC</provider>
+				      	<applicationName>${cloudhub.application.name}</applicationName>
+				      	<environment>${cloudhub.environment}</environment>
+				      	<target>${cloudhub.target}</target>
+				      	<authToken>${authToken}</authToken>
+				      	<replicas>${deployment.replicas}</replicas>
+				      	<vCores>${deployment.vcores}</vCores>
+				      	<properties>
 							<anypoint.platform.client_id>${anypoint.platform.client_id}</anypoint.platform.client_id>
 							<anypoint.platform.client_secret>${anypoint.platform.client_secret}</anypoint.platform.client_secret>
 							<env>${env}</env>
 							<encryptKey>${encryptKey}</encryptKey>
-						</properties>
-					</cloudHubDeployment>
+					  	</properties>
+    				</cloudhub2Deployment>
 				</configuration>
 			</plugin>
 		</plugins>
