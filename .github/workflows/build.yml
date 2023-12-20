@@ -1,14 +1,15 @@
+# This is a basic workflow to help you get started with Actions
+
 name: Build and deploy to DEV
 
 on:
   push:
     branches:  
-     - dev
+     - main
     
 jobs:
   build-dev:
     runs-on: ubuntu-latest
-    environment: DEV
     steps:
     - name: Checkout this repo
       uses: actions/checkout@v3
@@ -26,16 +27,11 @@ jobs:
         java-version: 8
     - name: Build with Maven
       env:
-        MULE_CLIENT_ID: ${{ secrets.mule_client_id }}
-        MULE_CLIENT_SECRET: ${{ secrets.mule_client_secret }}
-        REPOSITORY_NAME: ${{ vars.repository_name }}
+        MULE_CLIENT_ID: ${{secrets.mule_client_id}}
+        MULE_CLIENT_SECRET: ${{secrets.mule_client_secret}}
+        REPOSITORY_NAME: ${{vars.repository_name}}
       run: |
-        chmod +x src/main/resources/scripts/maven-configure.sh 
-        ./src/main/resources/scripts/maven-configure.sh \
-         --repository-name=$REPOSITORY_NAME \
-         --client-id=$MULE_CLIENT_ID \
-         --client-secret=$MULE_CLIENT_SECRET
-        mvn -B package --file pom.xml -DskipMunitTests -DattachMuleSources
+        mvn deploy --settings .maven/settings.xml || true
     - name: Stamp artifact file name with commit hash
       run: |
         artifactName1=$(ls target/*.jar | head -1)
@@ -51,8 +47,6 @@ jobs:
   deploy-dev:
     needs: build-dev
     runs-on: ubuntu-latest
-   
-    environment: DEV
     steps:    
     - name: Checkout this repo
       uses: actions/checkout@v3
@@ -68,33 +62,34 @@ jobs:
         name: artifacts
     - name: Deploy app asset to Exchange
       run: |
-        mvn clean deploy || true
-    - name: Deploy to Sandbox
-      env:
-        MULE_CLIENT_ID: ${{ secrets.mule_client_id }}
-        MULE_CLIENT_SECRET: ${{ secrets.mule_client_secret }}
-        ANYPOINT_CLIENT_ID: ${{ secrets.mule_client_id }}
-        ANYPOINT_CLIENT_SECRET: ${{ secrets.mule_client_secret }}
-        MULE_APP_NAME: ${{ vars.application_name }}
-        MULE_TARGET_NAME: ${{ vars.target_name }}
-        MULE_SERVER_ID: ${{ vars.repository_name }}
-        REPOSITORY_NAME: ${{ vars.repository_name }}
-        MULE_ENVIRONMENT: ${{ vars.environment }}
-        MULE_REPLICAS: ${{ vars.replicas }}
-        MULE_VCORES: ${{ vars.vcores }}
-        ENCRYPT_KEY: ${{ secrets.encrypt_key }}
-      run: |
-        chmod +x src/main/resources/scripts/maven-application-deploy.sh 
-        ./src/main/resources/scripts/maven-application-deploy.sh \
-         --client-id=$MULE_CLIENT_ID \
-         --client-secret=$MULE_CLIENT_SECRET \
-         --anypoint-platform-client-id=$ANYPOINT_CLIENT_ID \
-         --anypoint-platform-client-secret=$ANYPOINT_CLIENT_SECRET \
-         --application-name=$MULE_APP_NAME \
-         --target-name=$MULE_TARGET_NAME \
-         --server-id=$REPOSITORY_NAME \
-         --environment=$MULE_ENVIRONMENT \
-         --replicas=$MULE_REPLICAS \
-         --vcores=$MULE_VCORES \
-         --env=dev \
-         --encrypt-key=$ENCRYPT_KEY
+        mvn deploy --settings .maven/settings.xml -DmuleDeploy
+    # - name: Deploy to Sandbox
+    #   env:
+    #     MULE_CLIENT_ID: ${{ secrets.mule_client_id }}
+    #     MULE_CLIENT_SECRET: ${{ secrets.mule_client_secret }}
+    #     ANYPOINT_CLIENT_ID: ${{ secrets.mule_client_id }}
+    #     ANYPOINT_CLIENT_SECRET: ${{ secrets.mule_client_secret }}
+    #     MULE_APP_NAME: ${{ vars.application_name }}
+    #     MULE_TARGET_NAME: ${{ vars.target_name }}
+    #     MULE_SERVER_ID: ${{ vars.repository_name }}
+    #     REPOSITORY_NAME: ${{ vars.repository_name }}
+    #     MULE_ENVIRONMENT: ${{ vars.environment }}
+    #     MULE_REPLICAS: ${{ vars.replicas }}
+    #     MULE_VCORES: ${{ vars.vcores }}
+    #     ENCRYPT_KEY: ${{ secrets.encrypt_key }}
+    #   run: |
+    #     chmod +x src/main/resources/scripts/maven-application-deploy.sh 
+    #     ./src/main/resources/scripts/maven-application-deploy.sh \
+    #      --client-id=$MULE_CLIENT_ID \
+    #      --client-secret=$MULE_CLIENT_SECRET \
+    #      --anypoint-platform-client-id=$ANYPOINT_CLIENT_ID \
+    #      --anypoint-platform-client-secret=$ANYPOINT_CLIENT_SECRET \
+    #      --application-name=$MULE_APP_NAME \
+    #      --target-name=$MULE_TARGET_NAME \
+    #      --server-id=$REPOSITORY_NAME \
+    #      --environment=$MULE_ENVIRONMENT \
+    #      --replicas=$MULE_REPLICAS \
+    #      --vcores=$MULE_VCORES \
+    #      --env=dev \
+    #      --encrypt-key=$ENCRYPT_KEY
+
