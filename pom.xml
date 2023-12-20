@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>006ed2f2-257e-4812-b06a-9d749262acd3</groupId>
-	<artifactId>surexport-testcicd-api</artifactId>
+	<artifactId>surexport-testcicd-api-v2</artifactId>
 	<version>1.0.0</version>
 	<packaging>mule-application</packaging>
 
@@ -15,13 +15,20 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<mule.maven.plugin.version>4.0.0</mule.maven.plugin.version>
 		<maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>
+		<cloudhub.application.name>surexport-testcicd-api-v2</cloudhub.application.name>
+		<cloudhub.environment>Sandbox</cloudhub.environment>
+		<deployment.replicas>1</deployment.replicas>
+		<cloudhub.target>Cloudhub-US-East-2</cloudhub.target>
+		<deployment.vcores>0.1</deployment.vcores>
+		<env>qa</env>
+		<encryptKey>XXXXXXXXXXXXXXXXXXXXXXXXXXXX</encryptKey>
 	</properties>
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
-				<version>${maven.clean.plugin.version}</version>
+				<version>3.2.0</version>
 			</plugin>
 			<plugin>
 				<groupId>org.mule.tools.maven</groupId>
@@ -30,31 +37,51 @@
 				<extensions>true</extensions>
 				<configuration>
 					<classifier>mule-application</classifier>
-					<cloudHubDeployment>
+					<cloudhub2Deployment>
 						<uri>https://anypoint.mulesoft.com</uri>
 						<muleVersion>${deployment.mule.runtime}</muleVersion>
 						<businessGroupId>${project.groupId}</businessGroupId>
-						<authToken>${authToken}</authToken>
-						<environment>${cloudhub.environment}</environment>
+						<provider>MC</provider>
+						<server>anypoint-exchange-v3</server>
 						<applicationName>${cloudhub.application.name}</applicationName>
-						<region>eu-central-1</region>
-						<workers>${deployment.workers}</workers>
-						<workerType>${deployment.worker.type}</workerType>
-						<objectStoreV2>true</objectStoreV2>
-						<persistentQueues>false</persistentQueues>
-						<deploymentTimeout>600000</deploymentTimeout>
-						<applyLatestRuntimePatch>true</applyLatestRuntimePatch>
+						<environment>${cloudhub.environment}</environment>
+						<target>${cloudhub.target}</target>
+						<replicas>${deployment.replicas}</replicas>
+						<vCores>${deployment.vcores}</vCores>
 						<properties>
-							<anypoint.platform.client_id>${anypoint.platform.client_id}</anypoint.platform.client_id>
-							<anypoint.platform.client_secret>${anypoint.platform.client_secret}</anypoint.platform.client_secret>
 							<env>${env}</env>
 							<encryptKey>${encryptKey}</encryptKey>
 						</properties>
-					</cloudHubDeployment>
+					</cloudhub2Deployment>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+	<repositories>
+		<repository>
+			<id>anypoint-exchange-v3</id>
+			<name>Anypoint Exchange</name>
+			<url>https://maven.anypoint.mulesoft.com/api/v3/maven</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>mulesoft-releases</id>
+			<name>MuleSoft Releases Repository</name>
+			<url>https://repository.mulesoft.org/releases/</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>mulesoft-releases</id>
+			<name>mulesoft release repository</name>
+			<layout>default</layout>
+			<url>https://repository.mulesoft.org/releases/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 	<dependencies>
 		<dependency>
 			<groupId>org.mule.connectors</groupId>
@@ -74,13 +101,13 @@
 			<version>1.7.3</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
-		<dependency>
-			<groupId>006ed2f2-257e-4812-b06a-9d749262acd3</groupId>
-			<artifactId>salesforce-sapi</artifactId>
-			<version>1.0.57</version>
-			<classifier>raml</classifier>
-			<type>zip</type>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>006ed2f2-257e-4812-b06a-9d749262acd3</groupId> -->
+<!-- 			<artifactId>salesforce-sapi</artifactId> -->
+<!-- 			<version>1.0.57</version> -->
+<!-- 			<classifier>raml</classifier> -->
+<!-- 			<type>zip</type> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.mule.modules</groupId>
 			<artifactId>mule-apikit-module</artifactId>
@@ -88,49 +115,14 @@
 			<classifier>mule-plugin</classifier>
 		</dependency>
 	</dependencies>
-	<repositories>
-		<repository>
-			<id>anypoint-exchange-v3</id>
-			<name>Anypoint Exchange V3</name>
-			<url>https://maven.anypoint.mulesoft.com/api/v3/maven</url>
-			<layout>default</layout>
-		</repository>
-		<repository>
-			<id>anypoint-exchange-v2</id>
-			<name>Anypoint Exchange</name>
-			<url>https://maven.anypoint.mulesoft.com/api/v2/maven</url>
-			<layout>default</layout>
-		</repository>
-		<repository>
-			<id>mulesoft-releases</id>
-			<name>MuleSoft Releases Repository</name>
-			<url>https://repository.mulesoft.org/releases/</url>
-			<layout>default</layout>
-		</repository>
-		<repository>
-			<id>mulesoft-surexport-repository</id>
-			<name>mulesoft-surexport-repository</name>
-			<url>https://maven.anypoint.mulesoft.com/api/v3/organizations/006ed2f2-257e-4812-b06a-9d749262acd3/maven</url>
-			<layout>default</layout>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>mulesoft-releases</id>
-			<name>MuleSoft Releases Repository</name>
-			<layout>default</layout>
-			<url>https://repository.mulesoft.org/releases/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
-	<distributionManagement>
-		<repository>
-			<id>mulesoft-surexport-repository</id>
-			<name>mulesoft-surexport-repository</name>
-			<url>https://maven.anypoint.mulesoft.com/api/v3/organizations/006ed2f2-257e-4812-b06a-9d749262acd3/maven</url>
-			<layout>default</layout>
-		</repository>
-	</distributionManagement>
+ 
+	  <distributionManagement>
+        <repository>
+            <id>anypoint-exchange-v3</id>
+            <name>Corporate Repository</name>
+            <url>https://maven.anypoint.mulesoft.com/api/v3/organizations/006ed2f2-257e-4812-b06a-9d749262acd3/maven</url>
+            <layout>default</layout>
+        </repository>
+    </distributionManagement>
+ 
 </project>

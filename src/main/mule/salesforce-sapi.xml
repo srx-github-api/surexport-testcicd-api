@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
-    <apikit:config name="salesforce-sapi-config" api="resource::006ed2f2-257e-4812-b06a-9d749262acd3:salesforce-sapi:1.0.57:raml:zip:salesforce-sapi.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
-    <flow name="salesforce-sapi-main">
+<!--     <apikit:config name="salesforce-sapi-config" api="resource::006ed2f2-257e-4812-b06a-9d749262acd3:salesforce-sapi:1.0.57:raml:zip:salesforce-sapi.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" /> -->
+    
+    <!-- [STUDIO:"salesforce-sapi-main"]<flow name="salesforce-sapi-main">
         <http:listener config-ref="HTTP_LISTENER_CONFIG" path="/api/*">
-            <http:response statusCode="#[vars.httpStatus default 200]">
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            <http:response statusCode="#[vars.httpStatus default 200&#93;">
+                <http:headers>#[vars.outboundHeaders default {}&#93;</http:headers>
             </http:response>
-            <http:error-response statusCode="#[vars.httpStatus default 500]">
-                <http:body>#[payload]</http:body>
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            <http:error-response statusCode="#[vars.httpStatus default 500&#93;">
+                <http:body>#[payload&#93;</http:body>
+                <http:headers>#[vars.outboundHeaders default {}&#93;</http:headers>
             </http:error-response>
         </http:listener>
         <apikit:router config-ref="salesforce-sapi-config" />
@@ -18,8 +19,8 @@
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
----
-{message: "Bad request"}]]></ee:set-payload>
+&#45;&#45;-
+{message: "Bad request"}&#93;&#93;></ee:set-payload>
                     </ee:message>
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus">400</ee:set-variable>
@@ -31,8 +32,8 @@ output application/json
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
----
-{message: "Resource not found"}]]></ee:set-payload>
+&#45;&#45;-
+{message: "Resource not found"}&#93;&#93;></ee:set-payload>
                     </ee:message>
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus">404</ee:set-variable>
@@ -44,8 +45,8 @@ output application/json
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
----
-{message: "Method not allowed"}]]></ee:set-payload>
+&#45;&#45;-
+{message: "Method not allowed"}&#93;&#93;></ee:set-payload>
                     </ee:message>
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus">405</ee:set-variable>
@@ -57,8 +58,8 @@ output application/json
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
----
-{message: "Not acceptable"}]]></ee:set-payload>
+&#45;&#45;-
+{message: "Not acceptable"}&#93;&#93;></ee:set-payload>
                     </ee:message>
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus">406</ee:set-variable>
@@ -70,8 +71,8 @@ output application/json
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
----
-{message: "Unsupported media type"}]]></ee:set-payload>
+&#45;&#45;-
+{message: "Unsupported media type"}&#93;&#93;></ee:set-payload>
                     </ee:message>
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus">415</ee:set-variable>
@@ -83,8 +84,8 @@ output application/json
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
----
-{message: "Not Implemented"}]]></ee:set-payload>
+&#45;&#45;-
+{message: "Not Implemented"}&#93;&#93;></ee:set-payload>
                     </ee:message>
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus">501</ee:set-variable>
@@ -92,15 +93,15 @@ output application/json
                 </ee:transform>
             </on-error-propagate>
         </error-handler>
-    </flow>
-    <flow name="salesforce-sapi-console">
+    </flow> [STUDIO] -->
+    <!-- [STUDIO:"salesforce-sapi-console"]<flow name="salesforce-sapi-console">
         <http:listener config-ref="HTTP_LISTENER_CONFIG" path="/console/*">
-            <http:response statusCode="#[vars.httpStatus default 200]">
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            <http:response statusCode="#[vars.httpStatus default 200&#93;">
+                <http:headers>#[vars.outboundHeaders default {}&#93;</http:headers>
             </http:response>
-            <http:error-response statusCode="#[vars.httpStatus default 500]">
-                <http:body>#[payload]</http:body>
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            <http:error-response statusCode="#[vars.httpStatus default 500&#93;">
+                <http:body>#[payload&#93;</http:body>
+                <http:headers>#[vars.outboundHeaders default {}&#93;</http:headers>
             </http:error-response>
         </http:listener>
         <apikit:console config-ref="salesforce-sapi-config" />
@@ -110,8 +111,8 @@ output application/json
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
----
-{message: "Resource not found"}]]></ee:set-payload>
+&#45;&#45;-
+{message: "Resource not found"}&#93;&#93;></ee:set-payload>
                     </ee:message>
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus">404</ee:set-variable>
@@ -119,7 +120,7 @@ output application/json
                 </ee:transform>
             </on-error-propagate>
         </error-handler>
-    </flow>
+    </flow> [STUDIO] -->
     <flow name="patch:\contact:application\json:salesforce-sapi-config">
         <logger level="INFO" message="patch:\contact:application\json:salesforce-sapi-config" />
     </flow>
